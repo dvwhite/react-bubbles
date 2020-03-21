@@ -8,15 +8,14 @@ import { axiosWithAuth } from "./../utils/axiosWithAuth";
  * @returns: A promise, yet it's purpose is to grab a web token used to 
  *           authenticate with the API for all protected endpoints and to push to '/'
  */
-const login = (credentials, history) => {
-  return axios
-    .post("https://localhost:5000/api/login", credentials)
+export const login = (credentials, history) => {
+  return axios.post("http://localhost:5000/api/login", credentials)
     .then(res => {
-      localStorage.addItem("token", res.data.payload);
-      history.push("/");
+      localStorage.setItem("token", res.data.payload);
+      history.push('/bubbles');
       return res;
     })
-    .catch(err => console.error(err.response));
+    .catch(err => console.log("Error in actions>login:", err.response));
 };
 
 // [GET] to /api/colors: returns the list of colors and their hex codes.

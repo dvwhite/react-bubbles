@@ -13,7 +13,7 @@ const Form = styled.form`
 
 const Input = styled.input`
   margin: 1%;
-  width: 20%;
+  width: 50%;
   border-radius: 5px;
   border: 1px solid gray;
   outline: 0;
@@ -56,6 +56,7 @@ const Login = (props) => {
   // The form component
   return (
     <Form onSubmit={handleSubmit}>
+      <h1>Welcome to the Bubble App!</h1>
       <Input
         type="text"
         name="username"

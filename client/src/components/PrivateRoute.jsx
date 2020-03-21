@@ -10,7 +10,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
         const path = token ? (
           <Component {...props} />
         ) : (
-          <Redirect to="/login" />
+          <Redirect to="/" />
         );
         return path;
       }}
@@ -18,4 +18,4 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
   );
 };
 
-export const PrivateRoute;
+export default PrivateRoute;
