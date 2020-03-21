@@ -38,6 +38,7 @@ const ColorList = ({ colors, updateColors }) => {
       ...colors.filter(item => item.id !== colorToEdit.id),
       colorToEdit
     ]);
+    setEditing(false);
   };
 
   const deleteColor = color => {
