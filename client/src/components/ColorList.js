@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import axios from "axios";
 
+// Helper functions
+import { editColor as saveColor} from './../utils/actions';
+
 const initialColor = {
   color: "",
   code: { hex: "" }
 };
 
 const ColorList = ({ colors, updateColors }) => {
-  console.log(colors);
   const [editing, setEditing] = useState(false);
   const [colorToEdit, setColorToEdit] = useState(initialColor);
 
@@ -21,6 +23,10 @@ const ColorList = ({ colors, updateColors }) => {
     // Make a put request to save your updated color
     // think about where will you get the id from...
     // where is is saved right now?
+    saveColor(colorToEdit)
+      .then(res => res)
+      .catch(err => console.error(err.response));
+    updateColors([...colors.filter(item => item.id !== colorToEdit.id), colorToEdit])
   };
 
   const deleteColor = color => {

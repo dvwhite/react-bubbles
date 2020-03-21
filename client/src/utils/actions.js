@@ -30,11 +30,19 @@ export const getColors = () => {
     .then(res => {
       return res;
     })
-    .catch(err => console.log("Error in actions>login:", err.response));
+    .catch(err => console.log("Error in actions>getColors:", err.response));
 };
 
 // [POST] to /api/colors: creates a new color object. Pass the color as the body of the request (the second argument passed to axios.post).
 
+
 // [PUT] to /api/colors/:id: updates the color using the id passed as part of the URL. Send the color object with the updated information as the body of the request (the second argument passed to axios.put).
+  export const editColor = color => {
+    return axiosWithAuth().put(`/api/colors/${color.id}`, color)
+      .then(res => {
+        return res;
+      })
+      .catch(err => console.log("Error in actions>editColor:", err.response));
+  };
 
 // [DELETE] to /api/colors/123: removes the color using the id passed as part of the URL (123 in example).
