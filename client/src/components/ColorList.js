@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import axios from "axios";
 
 // Helper functions
-import { editColor as saveColor} from './../utils/actions';
+import { editColor as saveColor } from "./../utils/actions";
+import { deleteColor as removeColor } from "./../utils/actions";
 
 const initialColor = {
   color: "",
@@ -20,17 +21,20 @@ const ColorList = ({ colors, updateColors }) => {
 
   const saveEdit = e => {
     e.preventDefault();
-    // Make a put request to save your updated color
-    // think about where will you get the id from...
-    // where is is saved right now?
     saveColor(colorToEdit)
       .then(res => res)
       .catch(err => console.error(err.response));
-    updateColors([...colors.filter(item => item.id !== colorToEdit.id), colorToEdit])
+    updateColors([
+      ...colors.filter(item => item.id !== colorToEdit.id),
+      colorToEdit
+    ]);
   };
 
   const deleteColor = color => {
-    // make a delete request to delete this color
+    removeColor(color.id)
+      .then(res => res)
+      .catch(err => console.error(err.response));
+    updateColors([...colors.filter(item => item.id !== color.id)]);
   };
 
   return (
@@ -40,12 +44,14 @@ const ColorList = ({ colors, updateColors }) => {
         {colors.map(color => (
           <li key={color.color} onClick={() => editColor(color)}>
             <span>
-              <span className="delete" onClick={e => {
-                    e.stopPropagation();
-                    deleteColor(color)
-                  }
-                }>
-                  x
+              <span
+                className="delete"
+                onClick={e => {
+                  e.stopPropagation();
+                  deleteColor(color);
+                }}
+              >
+                x
               </span>{" "}
               {color.color}
             </span>

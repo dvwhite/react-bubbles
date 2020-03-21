@@ -5,7 +5,7 @@ import { axiosWithAuth } from "./../utils/axiosWithAuth";
  * @function login: Send a POSt request to /api/login that
  * @param {*} credentials: An object containing a username and a password key
  * @param {*} history: A history object from the useHistory hook or react-router-dom API
- * @returns: A promise, yet it's purpose is to grab a web token used to
+ * @returns {promise}: A promise, yet it's purpose is to grab a web token used to
  *           authenticate with the API for all protected endpoints and to push to '/'
  */
 export const login = (credentials, history) => {
@@ -22,7 +22,7 @@ export const login = (credentials, history) => {
 /**
  * @function getColors: Send a GET request to the API to obtain a list of colors
  * @param: none
- * @returns { promise }: A promise containing the API req/res data 
+ * @returns {promise}: A promise containing the API req/res data
  */
 export const getColors = () => {
   return axiosWithAuth()
@@ -35,14 +35,30 @@ export const getColors = () => {
 
 // [POST] to /api/colors: creates a new color object. Pass the color as the body of the request (the second argument passed to axios.post).
 
+/**
+ * @function editColor: Send a PUT request to the API to edit a color
+ * @param {*} color: The color object to replace the corresponding id with
+ * @returns {promise}: A promise with the call's req/res data
+ */
+export const editColor = color => {
+  return axiosWithAuth()
+    .put(`/api/colors/${color.id}`, color)
+    .then(res => {
+      return res;
+    })
+    .catch(err => console.log("Error in actions>editColor:", err.response));
+};
 
-// [PUT] to /api/colors/:id: updates the color using the id passed as part of the URL. Send the color object with the updated information as the body of the request (the second argument passed to axios.put).
-  export const editColor = color => {
-    return axiosWithAuth().put(`/api/colors/${color.id}`, color)
-      .then(res => {
-        return res;
-      })
-      .catch(err => console.log("Error in actions>editColor:", err.response));
-  };
-
-// [DELETE] to /api/colors/123: removes the color using the id passed as part of the URL (123 in example).
+/**
+ * @function deleteColor: Send a DELETE request to the API to remove the color with id
+ * @param {*} id: The id of the object to remove from the API
+ * @returns {promise}: A promise containing the API call's req/res data
+ */
+export const deleteColor = id => {
+  return axiosWithAuth()
+    .delete(`/api/colors/${id}`)
+    .then(res => {
+      return res;
+    })
+    .catch(err => console.log("Error in actions>deleteColor:", err.response));
+};
