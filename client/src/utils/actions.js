@@ -33,7 +33,20 @@ export const getColors = () => {
     .catch(err => console.log("Error in actions>getColors:", err.response));
 };
 
-// [POST] to /api/colors: creates a new color object. Pass the color as the body of the request (the second argument passed to axios.post).
+/**
+ * @function addColor: Add the new color to the API list of colors
+ * @param {*} color: The color object to add to the API's color list
+ * @returns {promise}: The promise containing the req/res data for the API call
+ */
+export const addColor = color => {
+  return axiosWithAuth()
+    .post('/api/colors', color)
+    .then(res => {
+      return res;
+    })
+    .catch(err => console.log("Error in actions>addColor:", err.response));
+};
+
 
 /**
  * @function editColor: Send a PUT request to the API to edit a color
