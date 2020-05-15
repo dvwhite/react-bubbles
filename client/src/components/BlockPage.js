@@ -2,13 +2,13 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 // Helper functions
-import { getColors } from './../utils/actions';
+import { getColors } from '../utils/actions';
 
 // Component imports
-import Bubbles from "./Bubbles";
+import Blocks from "./Blocks";
 import ColorList from "./ColorList";
 
-const BubblePage = () => {
+const BlockPage = () => {
   const [colorList, setColorList] = useState([]);
   // fetch your colors data from the server when the component mounts
   // set that data to the colorList state property
@@ -23,9 +23,9 @@ const BubblePage = () => {
   return (
     <>
       <ColorList colors={colorList} updateColors={setColorList} />
-      <Bubbles colors={colorList} />
+      <Blocks colors={colorList} />
     </>
   );
 };
 
-export default BubblePage;
+export default BlockPage;

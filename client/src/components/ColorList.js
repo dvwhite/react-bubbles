@@ -1,30 +1,63 @@
 import React, { useState } from "react";
 import axios from "axios";
 
+// Helper functions
+import { editColor as saveColor, addColor } from "./../utils/actions";
+import { deleteColor as removeColor } from "./../utils/actions";
+
 const initialColor = {
   color: "",
   code: { hex: "" }
 };
 
 const ColorList = ({ colors, updateColors }) => {
-  console.log(colors);
   const [editing, setEditing] = useState(false);
+  const [adding, setAdding] = useState(false);
   const [colorToEdit, setColorToEdit] = useState(initialColor);
+  const [colorInput, setColorInput] = useState({
+    ...initialColor,
+    id: Date.now()
+  });
 
   const editColor = color => {
     setEditing(true);
     setColorToEdit(color);
   };
 
+  const toggleAdd = () => {
+    setColorInput({...initialColor, id: Date.now()})
+    setAdding(!adding);
+  };
+
   const saveEdit = e => {
     e.preventDefault();
-    // Make a put request to save your updated color
-    // think about where will you get the id from...
-    // where is is saved right now?
+    saveColor(colorToEdit)
+      .then(res => res)
+      .catch(err => console.error(err.response));
+    updateColors([
+      ...colors.filter(item => item.id !== colorToEdit.id),
+      colorToEdit
+    ]);
+    setEditing(false);
   };
 
   const deleteColor = color => {
-    // make a delete request to delete this color
+    removeColor(color.id)
+      .then(res => res)
+      .catch(err => console.error(err.response));
+    updateColors([...colors.filter(item => item.id !== color.id)]);
+  };
+
+  const saveNew = e => {
+    e.preventDefault();
+    addColor(colorInput)
+      .then(res => res)
+      .catch(err => console.error(err.response));
+    updateColors([
+      ...colors.filter(item => item.id !== colorInput.id),
+      colorInput
+    ]);
+    setColorInput({...initialColor, id: Date.now()});
   };
 
   return (
@@ -32,14 +65,16 @@ const ColorList = ({ colors, updateColors }) => {
       <p>colors</p>
       <ul>
         {colors.map(color => (
-          <li key={color.color} onClick={() => editColor(color)}>
+          <li key={color.id} onClick={() => editColor(color)}>
             <span>
-              <span className="delete" onClick={e => {
-                    e.stopPropagation();
-                    deleteColor(color)
-                  }
-                }>
-                  x
+              <span
+                className="delete"
+                onClick={e => {
+                  e.stopPropagation();
+                  deleteColor(color);
+                }}
+              >
+                x
               </span>{" "}
               {color.color}
             </span>
@@ -50,6 +85,7 @@ const ColorList = ({ colors, updateColors }) => {
           </li>
         ))}
       </ul>
+      <button onClick={toggleAdd}>Add</button>
       {editing && (
         <form onSubmit={saveEdit}>
           <legend>edit color</legend>
@@ -77,6 +113,36 @@ const ColorList = ({ colors, updateColors }) => {
           <div className="button-row">
             <button type="submit">save</button>
             <button onClick={() => setEditing(false)}>cancel</button>
+          </div>
+        </form>
+      )}
+      {adding && (
+        <form onSubmit={saveNew}>
+          <legend>add color</legend>
+          <label>
+            color name:
+            <input
+              onChange={e =>
+                setColorInput({ ...colorInput, color: e.target.value })
+              }
+              value={colorInput.color}
+            />
+          </label>
+          <label>
+            hex code:
+            <input
+              onChange={e =>
+                setColorInput({
+                  ...colorInput,
+                  code: { hex: e.target.value }
+                })
+              }
+              value={colorInput.code.hex}
+            />
+          </label>
+          <div className="button-row">
+            <button type="submit">save</button>
+            <button onClick={() => setAdding(false)}>cancel</button>
           </div>
         </form>
       )}
